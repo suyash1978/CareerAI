@@ -9,6 +9,8 @@
 
 **CareerAI** is an intelligent, full-stack career platform and recruitment system. It bridges job seekers and recruiters using deterministic algorithms, structured PDF resume parsing, real-time analytics, Google Gemini AI assistance, and a complete Light & Dark theme design system.
 
+🚀 **Live Demo:** [View CareerAI](https://career-ai-psi-lemon.vercel.app/)
+
 ---
 
 ## 🌟 Key Features
