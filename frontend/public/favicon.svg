@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="sparkle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#grad)"/>
+  <!-- Briefcase Icon -->
+  <g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" transform="translate(24, 28)">
+    <rect x="6" y="22" width="68" height="48" rx="8" ry="8"/>
+    <path d="M54 70V14 a 7 7 0 0 0 -7 -7 H33 a 7 7 0 0 0 -7 7 v56"/>
+  </g>
+  <!-- AI Sparkle Icon -->
+  <path d="M96 22 C96 29 101 34 108 34 C101 34 96 39 96 46 C96 39 91 34 84 34 C91 34 96 29 96 22 Z" fill="url(#sparkle)"/>
+</svg>
