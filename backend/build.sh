@@ -10,3 +10,6 @@ python manage.py collectstatic --noinput
 
 # Run database migrations
 python manage.py migrate
+
+# Seed demo accounts and initial data
+python seed_demo_data.py

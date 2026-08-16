@@ -115,6 +115,42 @@ const Login = () => {
           </Link>
         </div>
 
+        {/* Quick Demo Credentials Assistant */}
+        <div className="mt-8 pt-6 border-t border-slate-800">
+          <p className="text-xs font-semibold text-slate-400 mb-3 text-center">
+            💡 Quick Demo Credentials (Click to Auto-Fill)
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setFormData({ username: 'seeker_demo', password: 'Password123!' })}
+              className="p-2.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-xl text-left transition-all text-xs group"
+            >
+              <div className="font-semibold text-blue-400 group-hover:text-blue-300">Job Seeker</div>
+              <div className="text-slate-300 font-mono text-[11px] mt-0.5">seeker_demo</div>
+              <div className="text-slate-500 font-mono text-[10px]">Password123!</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ username: 'recruiter_demo', password: 'Password123!' })}
+              className="p-2.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-xl text-left transition-all text-xs group"
+            >
+              <div className="font-semibold text-purple-400 group-hover:text-purple-300">Recruiter</div>
+              <div className="text-slate-300 font-mono text-[11px] mt-0.5">recruiter_demo</div>
+              <div className="text-slate-500 font-mono text-[10px]">Password123!</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ username: 'admin', password: 'Password123!' })}
+              className="p-2.5 bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-xl text-left transition-all text-xs group"
+            >
+              <div className="font-semibold text-amber-400 group-hover:text-amber-300">Admin</div>
+              <div className="text-slate-300 font-mono text-[11px] mt-0.5">admin</div>
+              <div className="text-slate-500 font-mono text-[10px]">Password123!</div>
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
