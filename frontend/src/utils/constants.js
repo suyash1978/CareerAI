@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1').replace(/\/+$/, '');
 export const BACKEND_URL = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
 
 export const getMediaUrl = (path) => {
@@ -8,9 +8,26 @@ export const getMediaUrl = (path) => {
     else if (path.url) path = path.url;
   }
   if (typeof path !== 'string') return '';
+
   if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
+    try {
+      const urlObj = new URL(path);
+      // If backend returns a localhost/127.0.0.1 media URL while using a remote backend, redirect origin to BACKEND_URL
+      if (
+        (urlObj.hostname === 'localhost' || urlObj.hostname === '127.0.0.1') &&
+        BACKEND_URL &&
+        !BACKEND_URL.includes('localhost') &&
+        !BACKEND_URL.includes('127.0.0.1')
+      ) {
+        const backendOrigin = new URL(BACKEND_URL).origin;
+        return `${backendOrigin}${urlObj.pathname}${urlObj.search}`;
+      }
+      return path;
+    } catch {
+      return path;
+    }
   }
+
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${BACKEND_URL}${cleanPath}`;
 };
