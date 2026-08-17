@@ -12,103 +12,65 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 from apps.accounts.models import JobSeekerProfile, RecruiterProfile
-from apps.jobs.models import Job, JobApplication
+from apps.jobs.models import Job
 
 User = get_user_model()
-
-def create_or_update_user(username, email, password, role, first_name="", last_name="", is_staff=False, is_superuser=False):
-    user = User.objects.filter(username=username).first()
-    if not user:
-        user = User.objects.filter(email=email).first()
-    if not user:
-        user = User(username=username, email=email)
-        
-    user.username = username
-    user.email = email
-    user.role = role
-    user.first_name = first_name
-    user.last_name = last_name
-    user.is_staff = is_staff
-    user.is_superuser = is_superuser
-    user.set_password(password)
-    user.save()
-    return user
 
 def seed_data():
     print("[INFO] Seeding Demo Accounts and Sample Job Postings...")
 
-    # 1. Job Seeker Demo Account ('seeker_demo')
-    seeker_demo = create_or_update_user(
-        username="seeker_demo",
-        email="seeker_demo@careerai.com",
-        password="Password123!",
-        role=User.Role.JOB_SEEKER,
-        first_name="Alex",
-        last_name="Rivera"
-    )
-    sp_seeker, _ = JobSeekerProfile.objects.get_or_create(user=seeker_demo)
-    sp_seeker.full_name = "Alex Rivera"
-    sp_seeker.phone = "+1 (555) 345-6789"
-    sp_seeker.location = "San Francisco, CA"
-    sp_seeker.education = "B.S. Computer Science & Software Engineering"
-    sp_seeker.skills = "React.js, Python, Django, Tailwind CSS, PostgreSQL, REST APIs, JavaScript"
-    sp_seeker.experience = "Full-Stack Software Engineer with 3+ years experience building web architectures."
-    sp_seeker.linkedin_url = "https://linkedin.com"
-    sp_seeker.github_url = "https://github.com"
-    sp_seeker.save()
-    print("[SUCCESS] Created / updated demo seeker 'seeker_demo' (Password: Password123!)")
-
-    # 2. Backward Compatibility Job Seeker ('Suyash')
-    user_suyash = create_or_update_user(
+    # 1. Create or update user 'Suyash'
+    user_suyash, created = User.objects.get_or_create(
         username="Suyash",
-        email="suyash@example.com",
-        password="Password123!",
-        role=User.Role.JOB_SEEKER,
-        first_name="Suyash",
-        last_name="Mandekar"
+        defaults={
+            "email": "suyash@example.com",
+            "role": User.Role.JOB_SEEKER,
+            "first_name": "Suyash",
+            "last_name": "Mandekar"
+        }
     )
-    sp_suyash, _ = JobSeekerProfile.objects.get_or_create(user=user_suyash)
-    sp_suyash.full_name = "Suyash Mandekar"
-    sp_suyash.phone = "+1 (555) 234-5678"
-    sp_suyash.location = "San Francisco, CA"
-    sp_suyash.education = "B.S. Computer Science & Artificial Intelligence"
-    sp_suyash.skills = "React.js, Python, Django, Tailwind CSS, PostgreSQL, REST APIs"
-    sp_suyash.experience = "Full-Stack Software Engineer with expertise in AI-driven web architectures."
-    sp_suyash.save()
+    user_suyash.set_password("Password123!")
+    user_suyash.save()
+
+    if hasattr(user_suyash, 'seeker_profile'):
+        sp = user_suyash.seeker_profile
+        sp.full_name = "Suyash Mandekar"
+        sp.phone = "+1 (555) 234-5678"
+        sp.location = "San Francisco, CA"
+        sp.education = "B.S. Computer Science & Artificial Intelligence"
+        sp.skills = "React.js, Python, Django, Tailwind CSS, PostgreSQL, REST APIs"
+        sp.experience = "Full-Stack Software Engineer with expertise in AI-driven web architectures."
+        sp.linkedin_url = "https://linkedin.com"
+        sp.github_url = "https://github.com"
+        sp.save()
+
     print("[SUCCESS] Created / updated user 'Suyash' (Password: Password123!)")
 
-    # 3. Recruiter Demo Account ('recruiter_demo')
-    recruiter = create_or_update_user(
+    # 2. Create demo Recruiter user
+    recruiter, _ = User.objects.get_or_create(
         username="recruiter_demo",
-        email="recruiter_demo@careerai.com",
-        password="Password123!",
-        role=User.Role.RECRUITER,
-        first_name="Sarah",
-        last_name="Conner"
+        defaults={
+            "email": "recruiter@careerai.com",
+            "role": User.Role.RECRUITER,
+            "first_name": "Sarah",
+            "last_name": "Conner"
+        }
     )
-    rp, _ = RecruiterProfile.objects.get_or_create(user=recruiter)
-    rp.company_name = "CareerAI Tech Labs"
-    rp.company_description = "Building next-generation AI platforms for talent acquisition and career automation."
-    rp.company_website = "https://careerai.example.com"
-    rp.company_location = "San Francisco, CA"
-    rp.designation = "Lead Technical Recruiter"
-    rp.save()
-    print("[SUCCESS] Created / updated demo recruiter 'recruiter_demo' (Password: Password123!)")
+    recruiter.set_password("Password123!")
+    recruiter.save()
 
-    # 4. Admin Demo Account ('admin')
-    admin = create_or_update_user(
-        username="admin",
-        email="admin@careerai.com",
-        password="Password123!",
-        role=User.Role.ADMIN,
-        first_name="System",
-        last_name="Admin",
-        is_staff=True,
-        is_superuser=True
-    )
-    print("[SUCCESS] Created / updated demo admin 'admin' (Password: Password123!)")
+    if hasattr(recruiter, 'recruiter_profile'):
+        rp = recruiter.recruiter_profile
+        rp.company_name = "CareerAI Tech Labs"
+        rp.company_description = "Building next-generation AI platforms for talent acquisition and career automation."
+        rp.company_website = "https://careerai.example.com"
+        rp.company_location = "San Francisco, CA"
+        rp.designation = "Lead Technical Recruiter"
+        rp.save()
 
-    # 5. Create sample jobs
+    print("[SUCCESS] Created demo recruiter 'recruiter_demo' (Password: Password123!)")
+
+    # 3. Create sample jobs
     sample_jobs = [
         {
             "title": "Senior Full-Stack Engineer (React & Django)",
@@ -168,7 +130,6 @@ def seed_data():
         }
     ]
 
-    created_jobs = []
     for jdata in sample_jobs:
         job, jcreated = Job.objects.get_or_create(
             title=jdata["title"],
@@ -176,20 +137,8 @@ def seed_data():
             recruiter=recruiter,
             defaults=jdata
         )
-        created_jobs.append(job)
         if jcreated:
             print(f"[JOB] Created job: {job.title}")
-
-    # Seed sample job application for candidate pipeline
-    if created_jobs:
-        JobApplication.objects.get_or_create(
-            job=created_jobs[0],
-            applicant=seeker_demo,
-            defaults={
-                "cover_letter": "I am excited to apply for the Senior Full-Stack Engineer role at CareerAI Tech Labs.",
-                "status": JobApplication.Status.APPLIED
-            }
-        )
 
     print("\n[SUCCESS] Demo Data Seeding Completed Successfully!")
 

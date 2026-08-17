@@ -21,7 +21,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver', 'careerai-backend-uhr4.onrender.com', '.onrender.com']
 render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME')
 if render_hostname:
     ALLOWED_HOSTS.append(render_hostname)
@@ -199,15 +199,16 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
+    'https://career-ai-psi-lemon.vercel.app',
 ]
 
 frontend_url = os.getenv('FRONTEND_URL')
 if frontend_url:
-    CORS_ALLOWED_ORIGINS.extend([url.strip() for url in frontend_url.split(',') if url.strip()])
+    CORS_ALLOWED_ORIGINS.extend([url.strip().rstrip('/') for url in frontend_url.split(',') if url.strip()])
 
 cors_origins_env = os.getenv('CORS_ALLOWED_ORIGINS')
 if cors_origins_env:
-    CORS_ALLOWED_ORIGINS.extend([origin.strip() for origin in cors_origins_env.split(',') if origin.strip()])
+    CORS_ALLOWED_ORIGINS.extend([origin.strip().rstrip('/') for origin in cors_origins_env.split(',') if origin.strip()])
 
 CORS_ALLOWED_ORIGINS = list(dict.fromkeys(CORS_ALLOWED_ORIGINS))
 

@@ -42,11 +42,26 @@ const Register = () => {
       await register(formData);
       navigate('/dashboard');
     } catch (err) {
+      console.error('Registration error:', err);
       const respData = err.response?.data;
-      if (typeof respData === 'object' && respData !== null) {
-        const firstKey = Object.keys(respData)[0];
-        const val = respData[firstKey];
-        setError(Array.isArray(val) ? `${firstKey}: ${val[0]}` : String(val));
+      if (respData && typeof respData === 'object') {
+        if (respData.detail) {
+          setError(String(respData.detail));
+        } else if (respData.non_field_errors) {
+          setError(Array.isArray(respData.non_field_errors) ? respData.non_field_errors[0] : String(respData.non_field_errors));
+        } else {
+          const keys = Object.keys(respData);
+          if (keys.length > 0) {
+            const firstKey = keys[0];
+            const val = respData[firstKey];
+            const msg = Array.isArray(val) ? val[0] : String(val);
+            setError(`${firstKey}: ${msg}`);
+          } else {
+            setError('Failed to create account. Please verify input data.');
+          }
+        }
+      } else if (!err.response || err.message?.includes('Network Error')) {
+        setError('Network connection failed. Unable to reach backend server. Please check connection/CORS configuration.');
       } else {
         setError('Failed to create account. Please verify input data.');
       }

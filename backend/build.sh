@@ -11,5 +11,5 @@ python manage.py collectstatic --noinput
 # Run database migrations
 python manage.py migrate
 
-# Seed demo accounts and initial data
+# Seed sample data safely (idempotent)
 python seed_demo_data.py
