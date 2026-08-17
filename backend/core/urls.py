@@ -13,17 +13,31 @@ def health_check(request):
     """Health check endpoint to verify backend status and database connectivity."""
     db_status = 'connected'
     db_ok = True
+    tables = []
+    user_count = -1
+    job_count = -1
+    db_error = None
     try:
         from django.db import connection
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1;")
+        from django.contrib.auth import get_user_model
+        from apps.jobs.models import Job
+        
+        tables = connection.introspection.table_names()
+        User = get_user_model()
+        user_count = User.objects.count()
+        job_count = Job.objects.count()
     except Exception as e:
+        import traceback
         db_ok = False
-        db_status = f"error: {str(e)}"
+        db_error = f"{type(e).__name__}: {str(e)}\n{traceback.format_exc()}"
 
     return Response({
         'status': 'healthy' if db_ok else 'degraded',
         'database': db_status,
+        'db_error': db_error,
+        'tables_found': tables,
+        'user_count': user_count,
+        'job_count': job_count,
         'app': 'CareerAI Backend API',
         'version': '1.0.0'
     }, status=200 if db_ok else 500)
