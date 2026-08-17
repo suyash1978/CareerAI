@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Briefcase, CheckCircle2, AlertCircle, Loader2, Sparkles } from 'lucide-react';
+import { X, Briefcase, DollarSign, MapPin, Calendar, CheckCircle2, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 import { jobApi } from '../../api/jobApi';
 
 const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
@@ -108,6 +108,7 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
     setSaving(true);
     setError('');
 
+    // Clean payload for Django REST Framework (convert empty strings to null for optional fields)
     const payload = {
       ...formData,
       salary_min: formData.salary_min !== '' && formData.salary_min !== null ? formData.salary_min : null,
@@ -146,37 +147,38 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 my-8 shadow-2xl relative space-y-6 transition-colors duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+      <div className="glass-panel w-full max-w-3xl rounded-3xl border border-slate-800 p-6 sm:p-8 my-8 shadow-2xl relative space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
-              <Briefcase className="w-5 h-5" />
+            <div className="p-3 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white">
+              <Briefcase className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              <h2 className="text-xl font-bold text-white">
                 {jobToEdit ? 'Edit Job Posting' : 'Create Job Posting'}
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Specify requirements, compensation, and responsibilities</p>
+              <p className="text-xs text-slate-400">Specify requirements, compensation, and responsibilities</p>
             </div>
           </div>
 
           <div className="flex items-center space-x-2">
+            {/* AI Description Enhancer Trigger */}
             <button
               type="button"
               disabled={generating}
               onClick={handleAiEnhance}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-purple-50 dark:bg-purple-900/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 hover:bg-purple-100 text-xs font-semibold transition-all"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 hover:text-white text-xs font-semibold transition-all"
             >
-              {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />}
+              {generating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5 text-purple-400" />}
               <span>{generating ? 'Generating...' : '✨ Enhance with AI'}</span>
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -184,14 +186,14 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center space-x-2">
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center space-x-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {aiSuccessMsg && (
-          <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 text-xs font-medium flex items-center space-x-2">
+          <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex items-center space-x-2">
             <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
             <span>{aiSuccessMsg}</span>
           </div>
@@ -202,7 +204,7 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
           {/* Title & Company */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Job Title *</label>
+              <label className="font-semibold text-slate-300">Job Title *</label>
               <input
                 type="text"
                 name="title"
@@ -210,12 +212,12 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g. Senior React Developer"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Company Name *</label>
+              <label className="font-semibold text-slate-300">Company Name *</label>
               <input
                 type="text"
                 name="company"
@@ -223,7 +225,7 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
                 value={formData.company}
                 onChange={handleChange}
                 placeholder="e.g. Acme Tech Solutions"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               />
             </div>
           </div>
@@ -231,7 +233,7 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
           {/* Location, Job Type, Experience */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Location *</label>
+              <label className="font-semibold text-slate-300">Location *</label>
               <input
                 type="text"
                 name="location"
@@ -239,17 +241,17 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="e.g. San Francisco, CA (Remote)"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Job Type *</label>
+              <label className="font-semibold text-slate-300">Job Type *</label>
               <select
                 name="job_type"
                 value={formData.job_type}
                 onChange={handleChange}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               >
                 <option value="FULL_TIME">Full Time</option>
                 <option value="PART_TIME">Part Time</option>
@@ -260,12 +262,12 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
             </div>
 
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Seniority Level *</label>
+              <label className="font-semibold text-slate-300">Seniority Level *</label>
               <select
                 name="experience_required"
                 value={formData.experience_required}
                 onChange={handleChange}
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               >
                 <option value="ENTRY">Entry Level</option>
                 <option value="MID">Mid Level</option>
@@ -278,33 +280,33 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
           {/* Salary Min & Max */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Salary Min ($/yr)</label>
+              <label className="font-semibold text-slate-300">Salary Min ($/yr)</label>
               <input
                 type="number"
                 name="salary_min"
                 value={formData.salary_min}
                 onChange={handleChange}
                 placeholder="e.g. 90000"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="font-bold text-slate-700 dark:text-slate-300">Salary Max ($/yr)</label>
+              <label className="font-semibold text-slate-300">Salary Max ($/yr)</label>
               <input
                 type="number"
                 name="salary_max"
                 value={formData.salary_max}
                 onChange={handleChange}
                 placeholder="e.g. 130000"
-                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
               />
             </div>
           </div>
 
           {/* Skills Required */}
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 dark:text-slate-300">Required Skills (Comma Separated) *</label>
+            <label className="font-semibold text-slate-300">Required Skills (Comma Separated) *</label>
             <input
               type="text"
               name="skills_required"
@@ -312,13 +314,13 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
               value={formData.skills_required}
               onChange={handleChange}
               placeholder="e.g. React.js, Python, Django, PostgreSQL, Docker"
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-3.5 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600"
+              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
             />
           </div>
 
           {/* Description */}
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 dark:text-slate-300">Job Description *</label>
+            <label className="font-semibold text-slate-300">Job Description *</label>
             <textarea
               rows={3}
               name="description"
@@ -326,49 +328,49 @@ const JobFormModal = ({ isOpen, onClose, jobToEdit = null, onJobSaved }) => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Detailed overview of the role..."
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 leading-relaxed"
+              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-slate-200 focus:outline-none focus:border-blue-500 leading-relaxed"
             />
           </div>
 
           {/* Responsibilities */}
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 dark:text-slate-300">Key Responsibilities</label>
+            <label className="font-semibold text-slate-300">Key Responsibilities</label>
             <textarea
               rows={3}
               name="responsibilities"
               value={formData.responsibilities}
               onChange={handleChange}
               placeholder="Bullet points of key duties..."
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 leading-relaxed"
+              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-slate-200 focus:outline-none focus:border-blue-500 leading-relaxed"
             />
           </div>
 
           {/* Qualifications */}
           <div className="space-y-1">
-            <label className="font-bold text-slate-700 dark:text-slate-300">Qualifications & Education</label>
+            <label className="font-semibold text-slate-300">Qualifications & Education</label>
             <textarea
               rows={3}
               name="qualifications"
               value={formData.qualifications}
               onChange={handleChange}
               placeholder="Bullet points of required experience..."
-              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl p-3 text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 leading-relaxed"
+              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-slate-200 focus:outline-none focus:border-blue-500 leading-relaxed"
             />
           </div>
 
           {/* Form Actions */}
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-semibold transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md shadow-blue-600/20 flex items-center space-x-2 transition-all"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-600/30 flex items-center space-x-2 transition-all"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               <span>{jobToEdit ? 'Save Changes' : 'Publish Job Posting'}</span>

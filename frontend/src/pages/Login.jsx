@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Lock, User, AlertCircle, Loader2, Eye, EyeOff, Briefcase, UserCheck, KeyRound } from 'lucide-react';
+import { Lock, User, AlertCircle, Loader2 } from 'lucide-react';
 
 const Login = () => {
   const { login } = useAuth();
@@ -11,17 +11,11 @@ const Login = () => {
     username: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) setError('');
-  };
-
-  const handleFillDemo = (username, password) => {
-    setFormData({ username, password });
     if (error) setError('');
   };
 
@@ -36,7 +30,7 @@ const Login = () => {
     } catch (err) {
       setError(
         err.response?.data?.detail ||
-        'Failed to sign in. Please check your username and password.'
+        'Failed to sign in. Please check your credentials.'
       );
     } finally {
       setSubmitting(false);
@@ -44,102 +38,64 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-12 transition-colors duration-200">
-      <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-xl border border-slate-200/80 dark:border-slate-800 space-y-6">
+    <div className="max-w-md mx-auto my-12">
+      <div className="glass-panel p-8 rounded-2xl shadow-2xl border border-slate-800">
 
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center">
-            <KeyRound className="w-6 h-6" />
-          </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Welcome Back
-          </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Sign in to access your CareerAI workspace
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
+          <p className="text-xs text-slate-400 mt-1">
+            Sign in to access your CareerAI dashboard
           </p>
         </div>
 
-        {/* Demo Account Fill Helper */}
-        <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block text-center">
-            ⚡ Quick Demo Sign-In
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleFillDemo('Suyash', 'Password123!')}
-              className="flex items-center justify-center space-x-1.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors shadow-sm"
-            >
-              <UserCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              <span>Job Seeker</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleFillDemo('recruiter_demo', 'Password123!')}
-              className="flex items-center justify-center space-x-1.5 p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-500 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors shadow-sm"
-            >
-              <Briefcase className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-              <span>Recruiter</span>
-            </button>
-          </div>
-        </div>
-
         {error && (
-          <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center space-x-2 text-rose-600 dark:text-rose-400 text-xs font-medium">
+          <div className="mb-6 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center space-x-2 text-rose-400 text-xs">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Username
             </label>
             <div className="relative">
-              <User className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 dark:text-slate-500" />
+              <User className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
               <input
                 type="text"
                 name="username"
                 required
                 value={formData.username}
                 onChange={handleChange}
-                placeholder="Enter username (e.g. Suyash)"
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/10 transition-colors"
+                placeholder="Enter your username"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-slate-200 text-sm focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 dark:text-slate-500" />
+              <Lock className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
               <input
-                type={showPassword ? 'text' : 'password'}
+                type="password"
                 name="password"
                 required
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-10 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/10 transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-slate-200 text-sm focus:outline-none focus:border-blue-500 transition-colors"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl shadow-md shadow-blue-600/20 transition-all disabled:opacity-50 text-sm mt-2"
+            className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all disabled:opacity-50"
           >
             {submitting ? (
               <>
@@ -152,10 +108,10 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-          Don't have an account yet?{' '}
-          <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:underline font-bold">
-            Create Free Account
+        <div className="mt-6 text-center text-xs text-slate-400">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-blue-400 hover:underline font-medium">
+            Create an Account
           </Link>
         </div>
 
