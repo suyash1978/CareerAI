@@ -10,12 +10,23 @@ from apps.accounts.admin_views import (
 
 @api_view(['GET'])
 def health_check(request):
-    """Health check endpoint to verify backend status."""
+    """Health check endpoint to verify backend status and database connectivity."""
+    db_status = 'connected'
+    db_ok = True
+    try:
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1;")
+    except Exception as e:
+        db_ok = False
+        db_status = f"error: {str(e)}"
+
     return Response({
-        'status': 'healthy',
+        'status': 'healthy' if db_ok else 'degraded',
+        'database': db_status,
         'app': 'CareerAI Backend API',
         'version': '1.0.0'
-    })
+    }, status=200 if db_ok else 500)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

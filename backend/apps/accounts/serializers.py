@@ -86,8 +86,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    seeker_profile = JobSeekerProfileSerializer(read_only=True)
-    recruiter_profile = RecruiterProfileSerializer(read_only=True)
+    seeker_profile = JobSeekerProfileSerializer(read_only=True, allow_null=True)
+    recruiter_profile = RecruiterProfileSerializer(read_only=True, allow_null=True)
 
     class Meta:
         model = User
@@ -101,10 +101,17 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         seeker_data = None
         recruiter_data = None
-        if hasattr(self.user, 'seeker_profile'):
-            seeker_data = JobSeekerProfileSerializer(self.user.seeker_profile).data
-        if hasattr(self.user, 'recruiter_profile'):
-            recruiter_data = RecruiterProfileSerializer(self.user.recruiter_profile).data
+        try:
+            if hasattr(self.user, 'seeker_profile') and self.user.seeker_profile:
+                seeker_data = JobSeekerProfileSerializer(self.user.seeker_profile).data
+        except Exception:
+            seeker_data = None
+
+        try:
+            if hasattr(self.user, 'recruiter_profile') and self.user.recruiter_profile:
+                recruiter_data = RecruiterProfileSerializer(self.user.recruiter_profile).data
+        except Exception:
+            recruiter_data = None
 
         data['user'] = {
             'id': self.user.id,

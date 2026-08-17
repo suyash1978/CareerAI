@@ -97,11 +97,17 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 if DATABASE_URL:
     import dj_database_url
+    # Render PostgreSQL requires SSL connection in production unless explicitly disabled
+    ssl_require = not ('localhost' in DATABASE_URL or '127.0.0.1' in DATABASE_URL)
+    if os.getenv('DATABASE_SSL_REQUIRE') is not None:
+        ssl_require = os.getenv('DATABASE_SSL_REQUIRE', 'True').lower() in ('true', '1', 't')
+
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
+            ssl_require=ssl_require,
         )
     }
 elif USE_POSTGRES:
@@ -212,7 +218,13 @@ if cors_origins_env:
 
 CORS_ALLOWED_ORIGINS = list(dict.fromkeys(CORS_ALLOWED_ORIGINS))
 
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https:\/\/.*\.vercel\.app$",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF Trusted Origins for POST/PUT requests in production
 CSRF_TRUSTED_ORIGINS = [origin for origin in CORS_ALLOWED_ORIGINS if origin.startswith(('http://', 'https://'))]
+CSRF_TRUSTED_ORIGINS.append('https://*.vercel.app')
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(CSRF_TRUSTED_ORIGINS))

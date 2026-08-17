@@ -69,6 +69,9 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     """Ensure corresponding profile object is created automatically when user is created."""
     if created:
         if instance.role == User.Role.JOB_SEEKER:
-            JobSeekerProfile.objects.get_or_create(user=instance, full_name=f"{instance.first_name} {instance.last_name}".strip() or instance.username)
+            JobSeekerProfile.objects.get_or_create(
+                user=instance,
+                defaults={'full_name': f"{instance.first_name} {instance.last_name}".strip() or instance.username}
+            )
         elif instance.role == User.Role.RECRUITER:
             RecruiterProfile.objects.get_or_create(user=instance)
