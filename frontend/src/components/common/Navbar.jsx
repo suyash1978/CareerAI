@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Briefcase, Sparkles, User, LogOut, Search, Building, Target, Zap, FileText, MessageSquare } from 'lucide-react';
+import { Briefcase, Sparkles, User, LogOut, Search, Target, Zap, FileText, MessageSquare } from 'lucide-react';
 import { ROLES } from '../../utils/constants';
 
 const Navbar = () => {
@@ -15,31 +15,32 @@ const Navbar = () => {
 
   const getDashboardPath = () => {
     if (role === ROLES.RECRUITER) return '/dashboard/recruiter';
+    if (role === ROLES.ADMIN) return '/dashboard/admin';
     return '/dashboard/seeker';
   };
 
   return (
-    <nav className="sticky top-0 z-50 glass-panel border-b border-slate-800/60">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo & Brand Name */}
+          {/* HospiWise Styled Brand Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="p-2 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-              <Briefcase className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 shadow-md shadow-blue-500/25 flex items-center justify-center text-white font-extrabold text-lg tracking-wider group-hover:scale-105 transition-transform duration-200">
+              CA
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              Career<span className="text-blue-500">AI</span>
+            <span className="text-xl font-extrabold text-slate-900 tracking-tight">
+              Career<span className="text-blue-600">AI</span>
             </span>
           </Link>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             <Link
               to="/jobs"
-              className="flex items-center space-x-1.5 text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors"
+              className="flex items-center space-x-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 px-3 py-1.5 rounded-lg transition-colors"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-4 h-4 text-slate-400" />
               <span>Explore Jobs</span>
             </Link>
 
@@ -47,33 +48,33 @@ const Navbar = () => {
               <>
                 <Link
                   to="/recommended-jobs"
-                  className="flex items-center space-x-1.5 text-sm font-medium text-purple-300 hover:text-purple-400 bg-purple-500/10 border border-purple-500/20 px-3 py-1 rounded-full transition-colors"
+                  className="flex items-center space-x-1.5 text-xs font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200/80 px-3 py-1.5 rounded-full transition-colors"
                 >
-                  <Target className="w-4 h-4 text-purple-400" />
+                  <Target className="w-3.5 h-3.5 text-purple-600" />
                   <span>AI Match</span>
                 </Link>
 
                 <Link
                   to="/skill-gap-analysis"
-                  className="flex items-center space-x-1.5 text-sm font-medium text-amber-300 hover:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full transition-colors"
+                  className="flex items-center space-x-1.5 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 px-3 py-1.5 rounded-full transition-colors"
                 >
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <Zap className="w-3.5 h-3.5 text-amber-600" />
                   <span>Skill Gap</span>
                 </Link>
 
                 <Link
                   to="/resume-analyzer"
-                  className="flex items-center space-x-1.5 text-sm font-medium text-blue-300 hover:text-blue-400 bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded-full transition-colors"
+                  className="flex items-center space-x-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-full transition-colors"
                 >
-                  <FileText className="w-4 h-4 text-blue-400" />
+                  <FileText className="w-3.5 h-3.5 text-blue-600" />
                   <span>Resume Audit</span>
                 </Link>
 
                 <Link
                   to="/mock-interview"
-                  className="flex items-center space-x-1.5 text-sm font-medium text-indigo-300 hover:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full transition-colors"
+                  className="flex items-center space-x-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 px-3 py-1.5 rounded-full transition-colors"
                 >
-                  <MessageSquare className="w-4 h-4 text-indigo-400" />
+                  <MessageSquare className="w-3.5 h-3.5 text-indigo-600" />
                   <span>Mock Interview</span>
                 </Link>
               </>
@@ -81,16 +82,16 @@ const Navbar = () => {
 
             <Link
               to="/ai-assistant"
-              className="flex items-center space-x-1.5 text-sm font-medium text-indigo-300 hover:text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full transition-colors"
+              className="flex items-center space-x-1.5 text-xs font-semibold text-blue-700 bg-blue-50/80 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-full transition-colors"
             >
-              <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 animate-pulse" />
               <span>AI Assistant</span>
             </Link>
 
             {isAuthenticated && (
               <Link
                 to={getDashboardPath()}
-                className="text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors"
+                className="text-sm font-medium text-slate-700 hover:text-blue-600 px-3 py-1.5 rounded-lg transition-colors"
               >
                 Dashboard
               </Link>
@@ -98,25 +99,25 @@ const Navbar = () => {
           </div>
 
           {/* Auth Actions / Profile Dropdown */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <Link
                   to={getDashboardPath()}
-                  className="flex items-center space-x-2 bg-slate-900 border border-slate-700/80 px-3.5 py-1.5 rounded-full hover:border-blue-500 transition-colors"
+                  className="flex items-center space-x-2 bg-slate-100 border border-slate-200/80 px-3.5 py-1.5 rounded-full hover:border-blue-300 transition-colors"
                 >
-                  <User className="w-4 h-4 text-blue-400" />
-                  <span className="text-xs font-semibold text-slate-200">
+                  <User className="w-4 h-4 text-blue-600" />
+                  <span className="text-xs font-bold text-slate-800">
                     {user?.username}
                   </span>
-                  <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                    {role === ROLES.RECRUITER ? 'Recruiter' : 'Seeker'}
+                  <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 border border-blue-200">
+                    {role === ROLES.RECRUITER ? 'Recruiter' : role === ROLES.ADMIN ? 'Admin' : 'Seeker'}
                   </span>
                 </Link>
 
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 transition-colors"
+                  className="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -126,15 +127,15 @@ const Navbar = () => {
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className="text-xs font-semibold text-slate-300 hover:text-white px-4 py-2 rounded-xl transition-colors"
+                  className="text-sm font-medium text-slate-700 hover:text-blue-600 px-4 py-2 rounded-xl transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl shadow-lg shadow-blue-600/30 transition-all"
+                  className="text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/25 transition-all"
                 >
-                  Get Started
+                  Register
                 </Link>
               </div>
             )}

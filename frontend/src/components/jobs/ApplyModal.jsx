@@ -63,68 +63,68 @@ const ApplyModal = ({ isOpen, onClose, job, onAppliedSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
-      <div className="glass-panel w-full max-w-xl rounded-3xl border border-slate-800 p-6 sm:p-8 my-8 shadow-2xl relative">
-        
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white w-full max-w-xl rounded-3xl border border-slate-200/80 p-6 sm:p-8 my-8 shadow-2xl relative text-slate-900">
+
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 flex items-center justify-center font-bold">
               <Building className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Apply for {job.title}</h2>
-              <p className="text-xs text-slate-400 mt-0.5">{job.company} • {job.location}</p>
+              <h2 className="text-lg font-extrabold text-slate-900">Apply for {job.title}</h2>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">{job.company} • {job.location}</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="mt-4 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="mt-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center space-x-2 font-semibold">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mt-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center space-x-2">
-            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+          <div className="mt-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs flex items-center space-x-2 font-semibold">
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
             <span>Application submitted successfully! Redirecting...</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-          
+
           {/* User Email & Name summary */}
-          <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 space-y-1">
-            <span className="text-slate-500 block font-semibold">APPLICANT DETAILS</span>
-            <p className="font-semibold text-white">
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1 font-medium">
+            <span className="text-slate-500 block font-bold text-[11px]">APPLICANT DETAILS</span>
+            <p className="font-extrabold text-slate-900">
               {user?.first_name ? `${user.first_name} ${user.last_name}` : user?.username} ({user?.email})
             </p>
           </div>
 
           {/* Resume Upload */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Resume File (PDF / DOCX)</label>
-            <div className="relative border border-dashed border-slate-700 hover:border-blue-500 rounded-2xl p-4 text-center cursor-pointer bg-slate-900/40 transition-colors">
+            <label className="block text-xs font-bold text-slate-700 mb-1">Resume File (PDF / DOCX)</label>
+            <div className="relative border border-dashed border-slate-300 hover:border-blue-500 rounded-2xl p-4 text-center cursor-pointer bg-slate-50 hover:bg-white transition-colors">
               <input
                 type="file"
                 accept=".pdf,.doc,.docx"
                 onChange={handleFileChange}
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
-              <Upload className="w-6 h-6 text-blue-400 mx-auto mb-2" />
+              <Upload className="w-6 h-6 text-blue-600 mx-auto mb-2" />
               {resumeFile ? (
-                <span className="text-xs text-emerald-400 font-semibold">{resumeFile.name}</span>
+                <span className="text-xs text-emerald-700 font-bold">{resumeFile.name}</span>
               ) : (
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-slate-500 font-medium">
                   Click to select resume file from device
                 </span>
               )}
@@ -133,22 +133,22 @@ const ApplyModal = ({ isOpen, onClose, job, onAppliedSuccess }) => {
 
           {/* Cover Letter / Notes */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">Cover Letter / Note to Recruiter</label>
+            <label className="block text-xs font-bold text-slate-700 mb-1">Cover Letter / Note to Recruiter</label>
             <textarea
               rows={4}
               value={coverLetter}
               onChange={(e) => setCoverLetter(e.target.value)}
               placeholder="Introduce yourself, highlight relevant technical projects, and explain why you're a great fit for this role..."
-              className="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 font-medium leading-relaxed transition-all"
             />
           </div>
 
           {/* Submit buttons */}
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition-colors"
+              className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors shadow-xs"
             >
               Cancel
             </button>
@@ -156,7 +156,7 @@ const ApplyModal = ({ isOpen, onClose, job, onAppliedSuccess }) => {
             <button
               type="submit"
               disabled={submitting || success}
-              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2.5 rounded-xl text-xs shadow-lg shadow-blue-600/30 transition-all disabled:opacity-50"
+              className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md shadow-blue-500/25 transition-all disabled:opacity-50"
             >
               {submitting ? (
                 <>
